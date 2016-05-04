@@ -15,6 +15,7 @@ import okhttp3.Response;
 public class ApiClient {
     private static final String LOG_TAG = "apiClient";
     private static final String END_POINT = "http://192.168.1.37:8080/";
+   // private static final String END_POINT = "http://192.168.56.1:8080/";
     static ApiClient instance = new ApiClient();
     private OkHttpClient client;
 
@@ -51,7 +52,6 @@ public class ApiClient {
                     .post(formBody)
                     .build();
 
-            OkHttpClient client = new OkHttpClient();
             Response response = null;
 
             response = client.newCall(request).execute();
@@ -62,5 +62,19 @@ public class ApiClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addProduct(String name, String price) throws IOException {
+        RequestBody formBody = new FormBody.Builder()
+                .add("product_name", name)
+                .add("product_price", price)
+                .build();
+        Request request = new Request.Builder()
+                .url(END_POINT + "api/products/add")
+                .post(formBody)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
     }
 }

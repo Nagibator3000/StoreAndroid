@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.EditText;
 
 import java.io.IOException;
 
@@ -13,6 +14,8 @@ public class ProductsActivity extends AppCompatActivity {
     private static final String LOG_TAG = "productsActivity";
     private RecyclerView recyclerView;
     private ProductsAdapter adapter;
+    private EditText editName;
+    private EditText editPrice;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,7 +25,29 @@ public class ProductsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ProductsAdapter(this);
         recyclerView.setAdapter(adapter);
+        findViewById(R.id.addProductBtn).setOnClickListener(v -> addProductAndRefreshTable());
+        editName = ((EditText) findViewById(R.id.textName))     ;
+        editPrice = ((EditText) findViewById(R.id.textPrice));
+
         reloadData();
+    }
+
+    public void addProductAndRefreshTable() {
+        String productName = editName.getText().toString();
+        String productPrice = editPrice.getText().toString();
+        new Thread(() -> {
+            try {
+                ApiClient.getInstance().addProduct(productName, productPrice);
+
+               runOnUiThread(()-> {editName.setText("");
+                   editPrice.setText("");});
+
+                reloadData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
 
     private void reloadData() {

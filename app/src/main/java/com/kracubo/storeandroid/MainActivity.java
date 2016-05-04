@@ -12,24 +12,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.buttonProducts).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showProducts();
-            }
-        });
-        findViewById(R.id.buttonCustomers).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCustomers();
-            }
-        });
-        findViewById(R.id.buttonPurchases).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPurchases();
-            }
-        });
+        findViewById(R.id.buttonProducts).setOnClickListener(v -> showProducts());
+        findViewById(R.id.buttonCustomers).setOnClickListener(v -> showCustomers());
+        findViewById(R.id.buttonPurchases).setOnClickListener(v -> showPurchases());
     }
 
     private void showPurchases() {
