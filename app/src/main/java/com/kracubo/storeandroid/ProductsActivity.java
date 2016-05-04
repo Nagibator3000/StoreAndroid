@@ -2,6 +2,7 @@ package com.kracubo.storeandroid;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +20,12 @@ public class ProductsActivity extends AppCompatActivity {
         setContentView(R.layout.products_activity);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ProductsAdapter();
+        adapter = new ProductsAdapter(this);
         recyclerView.setAdapter(adapter);
+        reloadData();
+    }
+
+    private void reloadData() {
         new Thread(() -> {
             try {
                 Product[] products = ApiClient.getInstance().getProducts();
@@ -29,5 +34,26 @@ public class ProductsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public void onLongClickProduct(long id) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", (dialog, which) -> deleteProductAndRefreshTable(id))
+                .setNegativeButton("No", (dialog1, which1) -> {
+                })
+                .create()
+                .show();
+
+    }
+
+    private void deleteProductAndRefreshTable(long id) {
+        new Thread(() -> {
+            ApiClient.getInstance().deleteProduct(id);
+            reloadData();
+        }).start();
+
+
     }
 }

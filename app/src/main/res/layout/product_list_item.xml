@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content" android:padding="12dp">
-   <TextView
-       android:textStyle="bold"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="product_name"
-       android:id="@+id/product_name"/>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
     <TextView
+        android:id="@+id/product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="product_name"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/product_price"
         android:layout_width="match_parent"
-        android:gravity="right"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="product_price"
-        android:id="@+id/product_price"/>
+        android:gravity="right"
+        android:text="product_price" />
 </LinearLayout>

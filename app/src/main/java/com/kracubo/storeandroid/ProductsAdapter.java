@@ -8,11 +8,16 @@ import android.widget.TextView;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ProductViewHolder> {
     private Product[] items = new Product[]{};
+    private ProductsActivity activity;
+
+    public ProductsAdapter(ProductsActivity activity) {
+        this.activity = activity;
+    }
 
     @Override
     public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_item, parent, false);
-        return new ProductViewHolder(view);
+        return new ProductViewHolder(view, this);
     }
 
     @Override
@@ -34,16 +39,26 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
 
         private final TextView productName;
         private final TextView productPrice;
+        private Product product;
 
-        public ProductViewHolder(View view) {
+        public ProductViewHolder(View view, ProductsAdapter adapter) {
             super(view);
+            view.setOnLongClickListener(v -> {
+                adapter.onLongClick(product.id);
+                return true;
+            });
             productName = (TextView) view.findViewById(R.id.product_name);
             productPrice = (TextView) view.findViewById(R.id.product_price);
         }
 
-        public void bind(Product item) {
-           productName.setText(item.name);
-            productPrice.setText(item.price+"");
+        public void bind(Product product) {
+            this.product = product;
+            productName.setText(product.name);
+            productPrice.setText(product.price + "");
         }
+    }
+
+    private void onLongClick(long id) {
+        activity.onLongClickProduct(id);
     }
 }
