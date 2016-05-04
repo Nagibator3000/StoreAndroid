@@ -43,6 +43,5 @@ public class MainActivity extends AppCompatActivity {
 
     private void showProducts() {
         startActivity(new Intent(this, ProductsActivity.class));
-
     }
 }
