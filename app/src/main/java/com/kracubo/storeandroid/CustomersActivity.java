@@ -10,37 +10,37 @@ import android.widget.EditText;
 
 import java.io.IOException;
 
-public class ProductsActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "productsActivity";
+public class CustomersActivity extends AppCompatActivity {
+    private static final String LOG_TAG = "customersActivity";
     private RecyclerView recyclerView;
-    private ProductsAdapter adapter;
+    private CustomersAdapter adapter;
     private EditText editName;
-    private EditText editPrice;
+    private EditText editDate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.products_activity);
+        setContentView(R.layout.customers_activity);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ProductsAdapter(this);
+        adapter = new CustomersAdapter(this);
         recyclerView.setAdapter(adapter);
-        findViewById(R.id.addProductBtn).setOnClickListener(v -> addProductAndRefreshTable());
+        findViewById(R.id.addCustomerBtn).setOnClickListener(v -> addCustomerAndRefreshTable());
         editName = ((EditText) findViewById(R.id.textNameCust))     ;
-        editPrice = ((EditText) findViewById(R.id.textPrice));
+        editDate = ((EditText) findViewById(R.id.textDate));
 
         reloadData();
     }
 
-    public void addProductAndRefreshTable() {
-        String productName = editName.getText().toString();
-        String productPrice = editPrice.getText().toString();
+    public void addCustomerAndRefreshTable() {
+        String customerName = editName.getText().toString();
+        String customerDate = editDate.getText().toString();
         new Thread(() -> {
             try {
-                ApiClient.getInstance().addProduct(productName, productPrice);
+                ApiClient.getInstance().addCustomer(customerName, customerDate);
 
-               runOnUiThread(()-> {editName.setText("");
-                   editPrice.setText("");});
+                runOnUiThread(()-> {editName.setText("");
+                    editDate.setText("");});
 
                 reloadData();
             } catch (IOException e) {
@@ -53,32 +53,34 @@ public class ProductsActivity extends AppCompatActivity {
     private void reloadData() {
         new Thread(() -> {
             try {
-                Product[] products = ApiClient.getInstance().getProducts();
-                runOnUiThread(() -> adapter.setItems(products));
+                Customer[] customers = ApiClient.getInstance().getCustomers();
+                runOnUiThread(() -> adapter.setItems(customers));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
     }
 
-    public void onLongClickProduct(long id) {
-        new AlertDialog.Builder(this)
-                .setTitle("Delete")
-                .setMessage("Are you sure?")
-                .setPositiveButton("Yes", (dialog, which) -> deleteProductAndRefreshTable(id))
-                .setNegativeButton("No", (dialog1, which1) -> {
-                })
-                .create()
-                .show();
-
-    }
-
-    private void deleteProductAndRefreshTable(long id) {
+    private void deleteCustomerAndRefreshTable(long id) {
         new Thread(() -> {
-            ApiClient.getInstance().deleteProduct(id);
+            ApiClient.getInstance().deleteCustomer(id);
             reloadData();
         }).start();
 
 
     }
+
+    public void onLongClickCustomer(long id) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", (dialog, which) -> deleteCustomerAndRefreshTable(id))
+                .setNegativeButton("No", (dialog1, which1) -> {
+                })
+                .create()
+                .show();
+
+
+    }
 }
+

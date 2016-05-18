@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showCustomers() {
+        startActivity(new Intent(this, CustomersActivity.class));
 
     }
 

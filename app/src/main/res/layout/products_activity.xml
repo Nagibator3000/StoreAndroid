@@ -11,7 +11,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
-                android:id="@+id/textName"/>
+                android:id="@+id/textNameCust"/>
 
             <EditText
                 android:layout_width="wrap_content"

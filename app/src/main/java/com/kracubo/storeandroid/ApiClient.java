@@ -14,8 +14,8 @@ import okhttp3.Response;
 
 public class ApiClient {
     private static final String LOG_TAG = "apiClient";
-    private static final String END_POINT = "http://192.168.1.37:8080/";
-   // private static final String END_POINT = "http://192.168.56.1:8080/";
+   // private static final String END_POINT = "http://192.168.1.37:8080/";
+    private static final String END_POINT = "http://192.168.56.1:8080/";
     static ApiClient instance = new ApiClient();
     private OkHttpClient client;
 
@@ -77,4 +77,50 @@ public class ApiClient {
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
     }
+
+    public Customer[] getCustomers() throws IOException {
+        String jsonString = getUrl(END_POINT + "api/customers/");
+        Customer[] customers = new Gson().fromJson(jsonString, Customer[].class);
+        return new Gson().fromJson(jsonString, Customer[].class);
+    }
+
+    public void deleteCustomer(long id) {
+        try {
+            RequestBody formBody = new FormBody.Builder()
+                    .add("customer_id", id + "")
+                    .build();
+            Request request = new Request.Builder()
+                    .url(END_POINT + "api/customer/delete")
+                    .post(formBody)
+                    .build();
+
+            Response response = null;
+
+            response = client.newCall(request).execute();
+
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+            System.out.println(response.body().string());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void addCustomer(String name, String date) throws IOException {
+        RequestBody formBody = new FormBody.Builder()
+                .add("customer_name", name)
+                .add("customer_date", date)
+                .build();
+        Request request = new Request.Builder()
+                .url(END_POINT + "api/customers/add")
+                .post(formBody)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+    }
+
+
+
 }
+

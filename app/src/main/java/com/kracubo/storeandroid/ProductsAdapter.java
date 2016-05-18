@@ -61,4 +61,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
     private void onLongClick(long id) {
         activity.onLongClickProduct(id);
     }
+
+
 }
